@@ -40,6 +40,13 @@ public class Product implements Serializable {
     /** URL da imagem do produto. */
     private String imgUrl;
 
+    /**
+     * Produtos associados ao pedido.
+     * Busca a partir do Id informado na tabela Order Item, e busca na tabela OrderItemPK os produtos do pedido.
+     */
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> items = new HashSet<>();
+
     /** Conjunto de categorias associadas ao produto. */
     @ManyToMany
     @JoinTable(name = "tb_product_category",
@@ -116,6 +123,15 @@ public class Product implements Serializable {
     /** Define a URL da imagem do produto. */
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    @JsonIgnore
+    public Set<Order> getOrders() {
+        Set<Order> set = new HashSet<>();
+        for (OrderItem x : items) {
+            set.add(x.getOrder());
+        }
+        return set;
     }
 
     /** Obtém o conjunto de categorias associadas ao produto. */
