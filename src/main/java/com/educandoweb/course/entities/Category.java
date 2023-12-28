@@ -68,6 +68,11 @@ public class Category implements Serializable {
         this.name = name;
     }
 
+    /**
+     * Obtém a coleção de produtos associados a esta categoria.
+     *
+     * @return A coleção de produtos associados.
+     */
     public Set<Product> getProducts() {
         return products;
     }

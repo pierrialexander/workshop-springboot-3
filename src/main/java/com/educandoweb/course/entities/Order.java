@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Classe que representa um pedido no sistema, contendo informações como identificador, momento de realização,
@@ -53,6 +55,13 @@ public class Order implements Serializable {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
+
+    /**
+     * Items associados ao pedido.
+     * Busca a partir do Id informado na tabela Order Item, e busca na tabela OrderItemPK os items do pedido.
+     */
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
 
     /**
      * Construtor padrão sem argumentos.
@@ -146,6 +155,15 @@ public class Order implements Serializable {
         if(orderStatus != null) {
             this.orderStatus = orderStatus.getCode();
         }
+    }
+
+    /**
+     * Obtém os itens associados a este pedido.
+     *
+     * @return Os itens associados a este pedido.
+     */
+    public Set<OrderItem> getItems() {
+        return items;
     }
 
     /**
