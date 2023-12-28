@@ -3,6 +3,8 @@ package com.educandoweb.course.entities;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -13,7 +15,7 @@ import java.util.Objects;
  * incluindo identificação, nome, email, telefone e senha.
  * Implementa a interface Serializable para suportar serialização.
  *
- * @author Seu Nome
+ * @author Pierri Alexander Vidmar
  * @version 1.0
  * @since 2023-01-01
  */
@@ -22,6 +24,7 @@ import java.util.Objects;
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,6 +32,12 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private String password;
+
+    /**
+     * Associação com Pedidos, atributo onde um Cliente pode ter vários pedidos.
+     */
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders = new ArrayList<>();
 
     /**
      * Construtor padrão sem argumentos.
@@ -144,6 +153,15 @@ public class User implements Serializable {
     }
 
     /**
+     * Retorna a lista de pedidos associada a esta instância.
+     *
+     * @return Uma lista contendo objetos do tipo {@code Order} representando os pedidos.
+     */
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    /**
      * Sobrescreve o método equals para comparar objetos User por sua identificação única.
      *
      * @param o Objeto a ser comparado.
@@ -166,4 +184,6 @@ public class User implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 }

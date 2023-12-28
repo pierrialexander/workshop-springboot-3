@@ -9,8 +9,17 @@ import org.springframework.context.annotation.Profile;
 
 import java.util.Arrays;
 
-// Classe de teste para ações auxiliares como de popular (database seeding)
-
+/**
+ * Classe de configuração utilizada para inicialização de dados de teste no perfil "test".
+ *
+ * Esta classe é anotada com @Configuration para indicar que contém configurações específicas do Spring.
+ * Além disso, é anotada com @Profile("test") para especificar que essas configurações são aplicáveis apenas ao perfil "test".
+ * Implementa a interface CommandLineRunner para executar a lógica de inicialização ao iniciar a aplicação.
+ *
+ * @see org.springframework.context.annotation.Configuration
+ * @see org.springframework.context.annotation.Profile
+ * @see org.springframework.boot.CommandLineRunner
+ */
 @Configuration
 @Profile("test")
 public class TestConfig implements CommandLineRunner {
