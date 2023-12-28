@@ -1,5 +1,6 @@
 package com.educandoweb.course.entities;
 
+import com.educandoweb.course.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
@@ -8,23 +9,47 @@ import java.time.Instant;
 import java.util.Objects;
 
 /**
- * Classe que representa a entidade de pedido (Order).
- * <p>
- * Esta classe é mapeada para a tabela "tb_order" no banco de dados.
+ * Classe que representa um pedido no sistema, contendo informações como identificador, momento de realização,
+ * estado do pedido, e o cliente associado a ele.
+ * A classe também implementa métodos para acesso, modificação e comparação de objetos Order.
+ * @author Pierri Alexander Vidmar
+ * @version 1.0
+ * @since 2023-01-01
  */
 @Entity
 @Table(name = "tb_order")
 public class Order implements Serializable {
 
+    /**
+     * Identificador de versão serial para garantir a compatibilidade durante a serialização.
+     * Este valor deve ser mantido consistente para evitar erros de desserialização.
+     */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Identificador único do objeto. É gerado automaticamente pelo sistema ao persistir o objeto no banco de dados.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Instante de tempo representando o momento em que ocorreu a ação associada a este objeto.
+     * Utilizado para registrar a data e hora exata de eventos relacionados ao objeto.
+     */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant moment;
 
+    /**
+     * Estado atual do pedido associado a este objeto.
+     * Pode representar diferentes etapas ou condições do ciclo de vida do pedido.
+     */
+    private Integer orderStatus;
+
+    /**
+     * Usuário associado a este objeto, representando o cliente relacionado ao pedido.
+     * Este atributo estabelece uma relação muitos-para-um com a entidade User, usando a chave estrangeira "client_id".
+     */
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
@@ -42,9 +67,10 @@ public class Order implements Serializable {
      * @param moment O momento em que o pedido foi realizado (Instant).
      * @param client O cliente associado a este pedido (objeto User).
      */
-    public Order(Long id, Instant moment, User client) {
+    public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
         this.id = id;
         this.moment = moment;
+        setOrderStatus(orderStatus);
         this.client = client;
     }
 
@@ -100,6 +126,26 @@ public class Order implements Serializable {
      */
     public void setClient(User client) {
         this.client = client;
+    }
+
+    /**
+     * Obtém o status do pedido.
+     *
+     * @return O status atual do pedido.
+     */
+    public OrderStatus getOrderStatus() {
+        return OrderStatus.valueOf(orderStatus);
+    }
+
+    /**
+     * Define o status do pedido.
+     *
+     * @param orderStatus O novo status a ser atribuído ao pedido.
+     */
+    public void setOrderStatus(OrderStatus orderStatus) {
+        if(orderStatus != null) {
+            this.orderStatus = orderStatus.getCode();
+        }
     }
 
     /**
