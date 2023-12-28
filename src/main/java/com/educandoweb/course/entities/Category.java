@@ -1,9 +1,10 @@
 package com.educandoweb.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Classe que representa uma categoria no sistema, contendo informações como identificador e nome.
@@ -27,6 +28,10 @@ public class Category implements Serializable {
 
     /** Nome da categoria. */
     private String name;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "categories")
+    private Set<Product> products = new HashSet<>();
 
     /** Construtor padrão sem argumentos. */
     public Category() {
@@ -61,6 +66,10 @@ public class Category implements Serializable {
     /** Define o nome da categoria. */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
     }
 
     /**
