@@ -169,12 +169,35 @@ public class Order implements Serializable {
         return items;
     }
 
+    /**
+     * Obtém o pagamento associado a este pedido.
+     *
+     * @return O pagamento associado a este pedido.
+     */
     public Payment getPayment() {
         return payment;
     }
 
+    /**
+     * Define o pagamento associado a este pedido.
+     *
+     * @param payment O pagamento a ser associado a este pedido.
+     */
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    /**
+     * Calcula e retorna o valor total do pedido, somando os subtotais de todos os itens.
+     *
+     * @return O valor total do pedido.
+     */
+    public Double getTotal() {
+        double sum = 0.0;
+        for (OrderItem x : items) {
+            sum += x.getSubTotal();
+        }
+        return sum;
     }
 
     /**
